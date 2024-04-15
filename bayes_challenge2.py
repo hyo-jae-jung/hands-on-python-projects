@@ -7,11 +7,12 @@ import cv2 as cv
 import argparse
 
 parser = argparse.ArgumentParser(description='monte-carlo method')
-parser.add_argument('--is123', type=bool, default=True)
+parser.add_argument('--is123', type=str, default=True)
 parser.add_argument('--count',type=int, default=1000)
 args = parser.parse_args()
 
 MAP_FILE = 'cape_python.png'
+
 
 # Assign search area (SA) corner point locations based on image pixels.
 SA1_CORNERS = (130, 265, 180, 315)  # (UL-X, UL-Y, LR-X, LR-Y)
@@ -87,9 +88,9 @@ class Search():
         cv.putText(self.img, '* = Actual Position', (275, 370),
                    cv.FONT_HERSHEY_PLAIN, 1, (255, 0, 0))
 
-        cv.imshow('Search Area', self.img)
-        cv.moveWindow('Search Area', 750, 10)
-        cv.waitKey(500)
+        # cv.imshow('Search Area', self.img)
+        # cv.moveWindow('Search Area', 750, 10)
+        # cv.waitKey(500)
 
     def sailor_final_location(self, num_search_areas):
         """Return the actual x,y location of the missing sailor."""
@@ -161,36 +162,39 @@ def draw_menu(search_num):
         )
 
 
+
 def main(search_type:bool):
     app = Search('Cape_Python')
     app.draw_map(last_known=(160, 290))
     sailor_x, sailor_y = app.sailor_final_location(num_search_areas=3)
-    print("-" * 65)
-    print("\nInitial Target (P) Probabilities:")
-    print("P1 = {:.3f}, P2 = {:.3f}, P3 = {:.3f}".format(app.p1, app.p2, app.p3))
+    # print("-" * 65)
+    # print("\nInitial Target (P) Probabilities:")
+    # print("P1 = {:.3f}, P2 = {:.3f}, P3 = {:.3f}".format(app.p1, app.p2, app.p3))
     search_num = 1
 
-    def is123(t:bool):
+    def is123(search_type:str):
         d = {
             "1":app.p1, "2":app.p2, "3":app.p3
             }
-        l = sorted(d.items(),key=lambda x:-x[1])[0][0]
-        if t:
-            return l[0][0]
-        else:
+        l = sorted(d.items(),key=lambda x:-x[1])
+        ll = l[0][0]
+        ans = ''
+        if search_type=='123':
+            ans = l[0][0]
+        elif search_type=='456':
             s = set([l[0][0],l[1][0]])
             if "1" in s and "2" in s:
-                return "4"
+                ans = "4"
             if "1" in s and "3" in s:
-                return "5"
+                ans = "5"
             if "2" in s and "3" in s:
-                return "6"
-            
+                ans = "6"
+        return ans
 
     while True:
         app.calc_search_effectiveness()
-        draw_menu(search_num)
-        choice = is123(args.is123)
+        # draw_menu(search_num)
+        choice = is123(search_type)
 
         if choice == "0":
             sys.exit()
@@ -240,28 +244,34 @@ def main(search_type:bool):
 
         app.revise_target_probs()  # Use Bayes' rule to update target probs.
 
-        print("\nSearch {} Results 1 = {}"
-              .format(search_num, results_1), file=sys.stderr)
-        print("Search {} Results 2 = {}\n"
-              .format(search_num, results_2), file=sys.stderr)
-        print("Search {} Effectiveness (E):".format(search_num))
-        print("E1 = {:.3f}, E2 = {:.3f}, E3 = {:.3f}"
-              .format(app.sep1, app.sep2, app.sep3))
+        # print("\nSearch {} Results 1 = {}"
+        #       .format(search_num, results_1), file=sys.stderr)
+        # print("Search {} Results 2 = {}\n"
+        #       .format(search_num, results_2), file=sys.stderr)
+        # print("Search {} Effectiveness (E):".format(search_num))
+        # print("E1 = {:.3f}, E2 = {:.3f}, E3 = {:.3f}"
+        #       .format(app.sep1, app.sep2, app.sep3))
 
         # Print target probabilities if sailor is not found else show position.
         if results_1 == 'Not Found' and results_2 == 'Not Found':
-            print("\nNew Target Probabilities (P) for Search {}:"
-                  .format(search_num + 1))
-            print("P1 = {:.3f}, P2 = {:.3f}, P3 = {:.3f}"
-                  .format(app.p1, app.p2, app.p3))
-        else:
-            cv.circle(app.img, (sailor_x, sailor_y), 3, (255, 0, 0), -1)
-            cv.imshow('Search Area', app.img)
-            cv.waitKey(1500)
-            main()
+            # print("\nNew Target Probabilities (P) for Search {}:"
+            #       .format(search_num + 1))
+            # print("P1 = {:.3f}, P2 = {:.3f}, P3 = {:.3f}"
+            #       .format(app.p1, app.p2, app.p3))
+            pass
+        # else:
+            # cv.circle(app.img, (sailor_x, sailor_y), 3, (255, 0, 0), -1)
+            # cv.imshow('Search Area', app.img)
+            # cv.waitKey(1500)
+            # main()
+            return search_num+1
         search_num += 1
 
 if __name__ == '__main__':
-    main()
+    l = []
+    for _ in range(args.count):
+        l.append(main(args.is123))
+
+    print(l)
 
 
