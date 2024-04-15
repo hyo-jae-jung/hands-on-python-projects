@@ -4,6 +4,13 @@ import itertools
 import numpy as np
 import cv2 as cv
 
+import argparse
+
+parser = argparse.ArgumentParser(description='monte-carlo method')
+parser.add_argument('--is123', type=bool, default=True)
+parser.add_argument('--count',type=int, default=1000)
+args = parser.parse_args()
+
 MAP_FILE = 'cape_python.png'
 
 # Assign search area (SA) corner point locations based on image pixels.
@@ -154,7 +161,7 @@ def draw_menu(search_num):
         )
 
 
-def main():
+def main(search_type:bool):
     app = Search('Cape_Python')
     app.draw_map(last_known=(160, 290))
     sailor_x, sailor_y = app.sailor_final_location(num_search_areas=3)
@@ -163,10 +170,27 @@ def main():
     print("P1 = {:.3f}, P2 = {:.3f}, P3 = {:.3f}".format(app.p1, app.p2, app.p3))
     search_num = 1
 
+    def is123(t:bool):
+        d = {
+            "1":app.p1, "2":app.p2, "3":app.p3
+            }
+        l = sorted(d.items(),key=lambda x:-x[1])[0][0]
+        if t:
+            return l[0][0]
+        else:
+            s = set([l[0][0],l[1][0]])
+            if "1" in s and "2" in s:
+                return "4"
+            if "1" in s and "3" in s:
+                return "5"
+            if "2" in s and "3" in s:
+                return "6"
+            
+
     while True:
         app.calc_search_effectiveness()
         draw_menu(search_num)
-        choice = input("Choice: ")
+        choice = is123(args.is123)
 
         if choice == "0":
             sys.exit()
@@ -239,3 +263,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
