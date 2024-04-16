@@ -1,15 +1,19 @@
 import matplotlib.pyplot as plt
+import time
 from bayes_challenge2 import main
 
 # 두 개의 리스트 생성 (예시)
 data1 = []
 data2 = []
 
-# for _ in range(10):
-#     data1.append(main('123'))
-#     data2.append(main('456'))
+start = time.time()
+
+for _ in range(100):
+    data1.append(main('123'))
+    data2.append(main('456'))
 
 print(data1,data2)
+print(time.time() - start)
 
 # 히스토그램 그리기
 plt.hist(data1, color='blue', alpha=0.5, label='Data 123')
