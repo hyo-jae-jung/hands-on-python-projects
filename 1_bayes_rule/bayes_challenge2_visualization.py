@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import time
-from bayes_challenge2 import main
+from bayes_challenge2_monte_carlo import main
 
 # 두 개의 리스트 생성 (예시)
 data1 = []
@@ -8,7 +8,7 @@ data2 = []
 
 start = time.time()
 
-for _ in range(100):
+for _ in range(1000):
     data1.append(main('123'))
     data2.append(main('456'))
 
