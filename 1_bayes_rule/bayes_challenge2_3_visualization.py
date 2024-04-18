@@ -19,9 +19,9 @@ print(sum(data1)/cnt,sum(data2)/cnt,sum(data3)/cnt)
 print(time.time() - start)
 
 # 히스토그램 그리기
-plt.hist(data1, color='blue', alpha=0.5, label='Data 1')
-plt.hist(data2, color='red', alpha=0.5, label='Data 2')
-plt.hist(data3, color='green', alpha=0.5, label='Data 3')
+plt.hist(data1, color='blue', alpha=0.5, label='한 개 영역 집중 탐색')
+plt.hist(data2, color='red', alpha=0.5, label='두 개 영역 분산 탐색')
+plt.hist(data3, color='green', alpha=0.5, label='가장 큰 PoD 탐색')
 
 # 축 레이블과 범례 추가
 plt.xlabel('Value')
