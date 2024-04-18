@@ -43,9 +43,9 @@ class Search():
         self.p3 = 0.3
 
         # Initialize search effectiveness probabilities.
-        self.sep1 = 0
-        self.sep2 = 0
-        self.sep3 = 0
+        self.sep1 = random.uniform(0.2, 0.9)
+        self.sep2 = random.uniform(0.2, 0.9)
+        self.sep3 = random.uniform(0.2, 0.9)
 
     def draw_map(self, last_known):
         """Display basemap with scale, last known xy location, search areas."""
@@ -135,38 +135,84 @@ class Search():
         self.p3 = self.p3 * (1 - self.sep3) / denom
 
 
-def draw_menu(search_num):
-    """Print menu of choices for conducting area searches."""
-    print('\nSearch {}'.format(search_num))
-    print(
-        """
-        Choose next areas to search:
+    def draw_menu(self, search_num):
+        """Print menu of choices for conducting area searches."""
+        if __name__ == "__main__":
+            print('\nSearch {}'.format(search_num))
+            print(
+                """
+                Choose next areas to search:
 
-        0 - Quit
-        1 - Search Area 1 twice
-        2 - Search Area 2 twice
-        3 - Search Area 3 twice
-        4 - Search Areas 1 & 2
-        5 - Search Areas 1 & 3
-        6 - Search Areas 2 & 3
-        7 - Start Over
-        """
-        )
+                0 - Quit
+                1 - Search Area 1 twice
+                2 - Search Area 2 twice
+                3 - Search Area 3 twice
+                4 - Search Areas 1 & 2
+                5 - Search Areas 1 & 3
+                6 - Search Areas 2 & 3
+                7 - Start Over
+                """ if search_num == 1 else
+                """
+                Choose next areas to search:
+
+                0 - Quit
+
+                1 - Search Area 1 twice
+                    Probability of detection: {:.3f}
+
+                2 - Search Area 2 twice
+                    Probability of detection: {:.3f}
+                    
+                3 - Search Area 3 twice
+                    Probability of detection: {:.3f}
+                    
+                4 - Search Areas 1 & 2
+                    Probability of detection: {:.3f}
+                    
+                5 - Search Areas 1 & 3
+                    Probability of detection: {:.3f}
+                    
+                6 - Search Areas 2 & 3
+                    Probability of detection: {:.3f}
+                    
+                7 - Start Over
+
+                """.format(
+                        1-(1-self.p1*self.sep1)**2,
+                        1-(1-self.p2*self.sep2)**2,
+                        1-(1-self.p3*self.sep3)**2,
+                        self.p1*self.sep1+self.p2*self.sep2,
+                        self.p1*self.sep1+self.p3*self.sep3,
+                        self.p2*self.sep2+self.p3*self.sep3,
+                        )
+                )
 
 
 def main():
     app = Search('Cape_Python')
-    app.draw_map(last_known=(160, 290))
+    if __name__ == "__main__":
+        app.draw_map(last_known=(160, 290))
     sailor_x, sailor_y = app.sailor_final_location(num_search_areas=3)
-    print("-" * 65)
-    print("\nInitial Target (P) Probabilities:")
-    print("P1 = {:.3f}, P2 = {:.3f}, P3 = {:.3f}".format(app.p1, app.p2, app.p3))
+    if __name__ == "__main__":
+        print("-" * 65)
+        print("\nInitial Target (P) Probabilities:")
+        print("P1 = {:.3f}, P2 = {:.3f}, P3 = {:.3f}".format(app.p1, app.p2, app.p3))
     search_num = 1
 
     while True:
-        app.calc_search_effectiveness()
-        draw_menu(search_num)
-        choice = input("Choice: ")
+        app.draw_menu(search_num)
+        if __name__ == "__main__":
+            choice = input("Choice: ")
+        else:
+            d = {
+                "1":1-(1-app.p1*app.sep1)**2,
+                "2":1-(1-app.p2*app.sep2)**2,
+                "3":1-(1-app.p3*app.sep3)**2,
+                "4":app.p1*app.sep1+app.p2*app.sep2,
+                "5":app.p1*app.sep1+app.p3*app.sep3,
+                "6":app.p2*app.sep2+app.p3*app.sep3,
+                }
+            choice = sorted(d.items(),key=lambda x:-x[1])[0][0]
 
         if choice == "0":
             sys.exit()
@@ -216,25 +262,34 @@ def main():
 
         app.revise_target_probs()  # Use Bayes' rule to update target probs.
 
-        print("\nSearch {} Results 1 = {}"
-              .format(search_num, results_1), file=sys.stderr)
-        print("Search {} Results 2 = {}\n"
-              .format(search_num, results_2), file=sys.stderr)
-        print("Search {} Effectiveness (E):".format(search_num))
-        print("E1 = {:.3f}, E2 = {:.3f}, E3 = {:.3f}"
-              .format(app.sep1, app.sep2, app.sep3))
+        if __name__ == "__main__":
+            print("\nSearch {} Results 1 = {}"
+                .format(search_num, results_1), file=sys.stderr)
+            print("Search {} Results 2 = {}\n"
+                .format(search_num, results_2), file=sys.stderr)
+            print("Search {} Effectiveness (E):".format(search_num))
+            print("E1 = {:.3f}, E2 = {:.3f}, E3 = {:.3f}"
+                .format(app.sep1, app.sep2, app.sep3))
+
+        app.calc_search_effectiveness()
 
         # Print target probabilities if sailor is not found else show position.
         if results_1 == 'Not Found' and results_2 == 'Not Found':
-            print("\nNew Target Probabilities (P) for Search {}:"
-                  .format(search_num + 1))
-            print("P1 = {:.3f}, P2 = {:.3f}, P3 = {:.3f}"
-                  .format(app.p1, app.p2, app.p3))
+            if __name__ == "__main__":
+                print("\nNew Planned Search Effectiveness (E) and Target Probabilities (P) for Search {}:"
+                    .format(search_num + 1))
+                print("P1 = {:.3f}, P2 = {:.3f}, P3 = {:.3f}"
+                    .format(app.sep1, app.sep2, app.sep3))
+                print("P1 = {:.3f}, P2 = {:.3f}, P3 = {:.3f}"
+                    .format(app.p1, app.p2, app.p3))
         else:
-            cv.circle(app.img, (sailor_x, sailor_y), 3, (255, 0, 0), -1)
-            cv.imshow('Search Area', app.img)
-            cv.waitKey(1500)
-            main()
+            if __name__ == "__main__":
+                cv.circle(app.img, (sailor_x, sailor_y), 3, (255, 0, 0), -1)
+                cv.imshow('Search Area', app.img)
+                cv.waitKey(1500)
+                main()
+            else:
+                return search_num + 1
         search_num += 1
 
 if __name__ == '__main__':
