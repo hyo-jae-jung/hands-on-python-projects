@@ -15,8 +15,9 @@ for _ in range(cnt):
     data2.append(main('456'))
     data3.append(main3())
 
-print(sum(data1)/cnt,sum(data2)/cnt,sum(data3)/cnt)
-print(time.time() - start)
+print("123전략",sum(data1)/cnt,"회\n","456전략",sum(data2)/cnt,"회\n","PoD전략",sum(data3)/cnt,"회")
+print(f"시뮬레이션 횟수: {cnt}")
+print("파일 실행 시간(초)",time.time() - start)
 
 # 히스토그램 그리기
 plt.hist(data1, color='blue', alpha=0.5, label='한 개 영역 집중 탐색')
