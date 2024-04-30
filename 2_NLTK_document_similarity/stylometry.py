@@ -16,9 +16,9 @@ def main():
     word_length_test(words_by_author, len_shortest_corpus)
     stopwords_test(words_by_author, len_shortest_corpus)
     parts_of_speech_test(words_by_author, len_shortest_corpus)
-    # vocab_test(words_by_author)
-    # jaccard_test(words_by_author, len_shortest_corpus)
-    
+    vocab_test(words_by_author)
+    jaccard_test(words_by_author, len_shortest_corpus)
+    dispersion_plot(words_by_author)
 
 def text_to_string(filename):
     with open(filename, encoding='utf-8', errors='ignore') as infile:
@@ -108,8 +108,59 @@ def parts_of_speech_test(words_by_author, len_shortest_corpus):
                                              linestyle=LINES[i],
                                              title='Part of Speech')
     plt.legend()
-    plt.show(block=True)
+    # plt.show(block=True)
+
+
+def vocab_test(words_by_author):
+    """카이제곱 검정 통계량을 사용해 작가가 사용한 어휘를 비교한다."""
+    chisquared_by_author = dict()
+    for author in words_by_author:
+        if author != 'unknown':
+            combined_corpus = (words_by_author[author] + words_by_author['unknown'])
+            author_proportion = (len(words_by_author[author])/len(combined_corpus))
+            combined_freq_dict = nltk.FreqDist(combined_corpus)
+            most_common_words = list(combined_freq_dict.most_common(1000)) 
+            """
+            특징
+                단어의 종류 다름
+
+            해결 방법
+                H0가 "unknown과 author가 같다."이니까 각 word별 비율도 같을거기 때문에 문제를 
+                동질성 검정(Test of Homogeneity)에서 적합도 검정(goodness of fit)으로 변경
+                (word by unknown+author)*proportion(author)을 E값으로,
+                word by author를 O값으로 사용
+                차이가 당연히 클 것으로 예상이 되지만 궁극적인 목적이 author별 비교이므로
+                각 카이제곱 통계량의 크기로 비교. 작은 게 unknown에 가깝다고 판단.
+            """
+            chisquared = 0
+            for word, combined_count in most_common_words:
+                observed_count_author = words_by_author[author].count(word)
+                expected_count_author = combined_count * author_proportion
+                chisquared+=((observed_count_author - expected_count_author)**2 / expected_count_author)
+                chisquared_by_author[author] = chisquared 
+            print('Chi-squared for {} = {:.1f}'.format(author, chisquared))
+    most_likely_author = min(chisquared_by_author, key=chisquared_by_author.get)
+    print('Most-likely author by vocabulary is {}\n'.format(most_likely_author))
+
+
+def jaccard_test(words_by_author, len_shortest_corpus):
+    """
+    작가가 파악된 두 코퍼스와 작자미상의 코퍼스 사이의 자카드 유사도를 계산한다.
+    word count는 배제하고 word type으로만 판단.
+    """
+    jaccard_by_author = dict()
+    unique_words_unknown = set(words_by_author['unknown'][:len_shortest_corpus])
+    authors = (author for author in words_by_author if author != 'unknown')
+    for author in authors:
+        unique_words_author = set(words_by_author[author][:len_shortest_corpus])
+        shared_words = unique_words_author.intersection(unique_words_unknown)
+        jaccard_sim = (float(len(shared_words)/(len(unique_words_author)+len(unique_words_unknown) - len(shared_words))))
+
+        jaccard_by_author[author] = jaccard_sim
+        print('Jaccard Similarity for {} ={}'.format(author, jaccard_sim))
+    most_likely_author = max(jaccard_by_author, key=jaccard_by_author.get)
+    print('Most-likely author by similarity is {}'.format(most_likely_author))
+
 
 if __name__ == "__main__":
     main()
-    
