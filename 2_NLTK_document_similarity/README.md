@@ -11,7 +11,101 @@ nltk                      3.8.1
   ┣ nltk.download('punkt') / Punkt Tokenizer Models  
   ┣ nltk.download('stopwords') / Stopwords Corpus(불용어 코퍼스)  
   ┗ nltk.download('averaged_perceptron_tagger')  
+ 
 
+# 파일 구조 및 개요
+
+ 📦2_NLTK_document_similarity
+ ┣ 📂nltk_data
+ ┃ ┣ 📂corpora
+ ┃ ┃ ┣ 📂stopwords
+ ┃ ┃ ┃ ┣ 📜README
+ ┃ ┃ ┃ ┣ 📜arabic
+ ┃ ┃ ┃ ┣ 📜azerbaijani
+ ┃ ┃ ┃ ┣ 📜basque
+ ┃ ┃ ┃ ┣ 📜bengali
+ ┃ ┃ ┃ ┣ 📜catalan
+ ┃ ┃ ┃ ┣ 📜chinese
+ ┃ ┃ ┃ ┣ 📜danish
+ ┃ ┃ ┃ ┣ 📜dutch
+ ┃ ┃ ┃ ┣ 📜english
+ ┃ ┃ ┃ ┣ 📜finnish
+ ┃ ┃ ┃ ┣ 📜french
+ ┃ ┃ ┃ ┣ 📜german
+ ┃ ┃ ┃ ┣ 📜greek
+ ┃ ┃ ┃ ┣ 📜hebrew
+ ┃ ┃ ┃ ┣ 📜hinglish
+ ┃ ┃ ┃ ┣ 📜hungarian
+ ┃ ┃ ┃ ┣ 📜indonesian
+ ┃ ┃ ┃ ┣ 📜italian
+ ┃ ┃ ┃ ┣ 📜kazakh
+ ┃ ┃ ┃ ┣ 📜nepali
+ ┃ ┃ ┃ ┣ 📜norwegian
+ ┃ ┃ ┃ ┣ 📜portuguese
+ ┃ ┃ ┃ ┣ 📜romanian
+ ┃ ┃ ┃ ┣ 📜russian
+ ┃ ┃ ┃ ┣ 📜slovene
+ ┃ ┃ ┃ ┣ 📜spanish
+ ┃ ┃ ┃ ┣ 📜swedish
+ ┃ ┃ ┃ ┣ 📜tajik
+ ┃ ┃ ┃ ┗ 📜turkish
+ ┃ ┃ ┗ 📜stopwords.zip
+ ┃ ┣ 📂taggers
+ ┃ ┃ ┣ 📂averaged_perceptron_tagger
+ ┃ ┃ ┃ ┗ 📜averaged_perceptron_tagger.pickle
+ ┃ ┃ ┗ 📜averaged_perceptron_tagger.zip
+ ┃ ┗ 📂tokenizers
+ ┃ ┃ ┣ 📂punkt
+ ┃ ┃ ┃ ┣ 📂PY3
+ ┃ ┃ ┃ ┃ ┣ 📜README
+ ┃ ┃ ┃ ┃ ┣ 📜czech.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜danish.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜dutch.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜english.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜estonian.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜finnish.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜french.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜german.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜greek.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜italian.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜malayalam.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜norwegian.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜polish.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜portuguese.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜russian.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜slovene.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜spanish.pickle
+ ┃ ┃ ┃ ┃ ┣ 📜swedish.pickle
+ ┃ ┃ ┃ ┃ ┗ 📜turkish.pickle
+ ┃ ┃ ┃ ┣ 📜.DS_Store
+ ┃ ┃ ┃ ┣ 📜README
+ ┃ ┃ ┃ ┣ 📜czech.pickle
+ ┃ ┃ ┃ ┣ 📜danish.pickle
+ ┃ ┃ ┃ ┣ 📜dutch.pickle
+ ┃ ┃ ┃ ┣ 📜english.pickle
+ ┃ ┃ ┃ ┣ 📜estonian.pickle
+ ┃ ┃ ┃ ┣ 📜finnish.pickle
+ ┃ ┃ ┃ ┣ 📜french.pickle
+ ┃ ┃ ┃ ┣ 📜german.pickle
+ ┃ ┃ ┃ ┣ 📜greek.pickle
+ ┃ ┃ ┃ ┣ 📜italian.pickle
+ ┃ ┃ ┃ ┣ 📜malayalam.pickle
+ ┃ ┃ ┃ ┣ 📜norwegian.pickle
+ ┃ ┃ ┃ ┣ 📜polish.pickle
+ ┃ ┃ ┃ ┣ 📜portuguese.pickle
+ ┃ ┃ ┃ ┣ 📜russian.pickle
+ ┃ ┃ ┃ ┣ 📜slovene.pickle
+ ┃ ┃ ┃ ┣ 📜spanish.pickle
+ ┃ ┃ ┃ ┣ 📜swedish.pickle
+ ┃ ┃ ┃ ┗ 📜turkish.pickle
+ ┃ ┃ ┗ 📜punkt.zip
+ ┣ 📜README.md
+ ┣ 📜hound.txt / 셜록홈즈:바스커빌 가문의 개 / doyle
+ ┣ 📜lost.txt / 잃어버린 세계 / unknown
+ ┣ 📜practice1_dispersion_plot.py / dispersion_plot 출력하는 파일인데 동작을 안해서 개별적으로 시각화 필요
+ ┣ 📜practice2_heatmap.py / heatmap 출력 파일인데 동작을 안해서 개별적으로 시각화 필요
+ ┣ 📜stylometry.py / 잃어버린 세계를 바스커빌 가문의 개와 우주 전쟁 각각 비교해서 유사한 소설의 작가 추측하는 파일
+ ┗ 📜war.txt / 우주 전쟁 / wells
 
 # 참조
 
